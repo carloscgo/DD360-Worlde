@@ -1,4 +1,4 @@
-// infrastructure/ui/utils/routes.ts
+// infrastructure/ui/utils/routes
 
 import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom'
 

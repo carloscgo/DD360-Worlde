@@ -7,6 +7,7 @@ import {
   PropsTransitionChild2,
 } from '../../utils/constants'
 import { PropsModal } from '../../utils/interfaces'
+import Button from '../Button'
 
 export default function Modal({
   title,
@@ -45,7 +46,7 @@ export default function Modal({
               <Dialog.Panel className="w-[546px] relative transform overflow-hidden rounded-lg border-solid border-black border-[1px] bg-zinc-100 dark:bg-slate-800 text-left shadow-xl transition-all">
                 <div className="px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="flex flex-col items-start">
-                    <div className="flex w-full p-[54px] items-center justify-center">
+                    <div className="flex w-full pt-[14px] pb-[32px] items-center justify-center">
                       <Dialog.Title
                         as="h3"
                         className="flex items-center text-[35px] font-extrabold font-['Roboto'] text-black dark:text-white"
@@ -53,18 +54,17 @@ export default function Modal({
                         {title}
                       </Dialog.Title>
                     </div>
-                    <div className="mt-2 w-full text-[35px] font-extrabold font-['Roboto'] text-black dark:text-white">
+                    <div className="w-full text-[19px] font-['Roboto'] text-black dark:text-white px-[15px]">
                       {children}
                     </div>
                   </div>
                 </div>
-                <div className="px-4 py-3 flex items-center justify-center">
-                  <button
-                    type="button"
+                <div className="px-4 pt-3 mb-[24px] flex items-center justify-center">
+                  <Button
                     onClick={handlerClose}
                   >
                     {labelButton}
-                  </button>
+                  </Button>
                 </div>
               </Dialog.Panel>
             </Transition.Child>

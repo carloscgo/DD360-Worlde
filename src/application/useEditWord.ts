@@ -1,8 +1,8 @@
-// application/useEditShape.ts
+// application/useEditWord.ts
 
 import { useIndexDB } from '.'
 
-export const useEditShape = () => {
+export const useEditWord = () => {
   const { updateRecord } = useIndexDB()
 
   return updateRecord

@@ -11,9 +11,10 @@ type PropsStatistics = {
     victories: number
     timer: number
     word?: string
+    onClose: () => void
 }
 
-export default function Statistics({ show, plays, victories, timer, word }: PropsStatistics) {
+export default function Statistics({ show, plays, victories, timer, word, onClose }: PropsStatistics) {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [timeLeft, setTimeLeft] = useState<number>(timer);
     const timerInterval = useRef<NodeJS.Timeout | null>(null);
@@ -49,12 +50,17 @@ export default function Statistics({ show, plays, victories, timer, word }: Prop
         }
     }, [timeLeft]);
 
+    const handlerClose = () => {
+        setShowModal(false)
+        onClose()
+    }
+
     return (
         <Modal
             title='Estadísticas'
             labelButton='Aceptar'
             show={showModal}
-            onClose={() => setShowModal(false)}
+            onClose={handlerClose}
         >
             <div className="text-black dark:text-white mx-auto w-[100%]">
                 <div className="flex flex-row justify-around">

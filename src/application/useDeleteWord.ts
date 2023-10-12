@@ -1,8 +1,8 @@
-// application/useDeleteShape.ts
+// application/useDeleteWord.ts
 
 import { useIndexDB } from '.'
 
-export const useDeleteShape = () => {
+export const useDeleteWord = () => {
   const { deleteRecord } = useIndexDB()
 
   return deleteRecord

@@ -6,21 +6,27 @@ import KeyB from "../KeyB";
 
 type PropsInstructions = {
     show: boolean
+    onClose: () => void
 }
 
-export default function Instructions({ show }: PropsInstructions) {
+export default function Instructions({ show, onClose }: PropsInstructions) {
     const [showModal, setShowModal] = useState<boolean>(false);
 
     useEffect(() => {
         setShowModal(show)
     }, [show])
 
+    const handlerClose = () => {
+        setShowModal(false)
+        onClose()
+    }
+
     return (
         <Modal
             title='Cómo jugar'
             labelButton='!JUGAR¡'
             show={showModal}
-            onClose={() => setShowModal(false)}
+            onClose={handlerClose}
         >
             <p className="pb-4">Adivina la palabra oculta en cinco intentos. </p>
             <p className="pb-4">Cada intento debe ser una palabra válida de 5 letras. </p>

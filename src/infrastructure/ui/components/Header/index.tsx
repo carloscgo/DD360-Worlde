@@ -1,16 +1,24 @@
 // infrastructure/ui/components/Header
 
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AppName } from '../../utils/constants'
 import ToggleTheme from '../ToggleTheme'
 import Themes from '../../utils/themes';
+import ThemeContext from '../ThemeContext';
 
 type PropsHeader = {
   className?: string
+  onInstructions: () => void
+  onStatistics: () => void
 }
 
-export default function Header({ className = '' }: PropsHeader) {
+export default function Header({ onInstructions, onStatistics, className = '' }: PropsHeader) {
   const [theme, setTheme] = useState<string>(Themes.light);
+  const { toggleTheme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    toggleTheme(theme);
+  }, [theme])
 
   return (
     <nav
@@ -18,7 +26,7 @@ export default function Header({ className = '' }: PropsHeader) {
       aria-label="Header"
     >
       <div className="flex items-start w-[114px]">
-        <img className="w-[27px] h-[27px]" src={`/images/bi_question-circle-fill-${theme}.svg`} role='button' />
+        <img className="w-[27px] h-[27px]" src={`/images/bi_question-circle-fill-${theme}.svg`} role='button' onClick={onInstructions} />
       </div>
 
       <div className="text-center text-gray-800 dark:text-gray-300 text-[40px] font-semibold font-['Roboto'] tracking-[3px]">
@@ -26,7 +34,7 @@ export default function Header({ className = '' }: PropsHeader) {
       </div>
 
       <div className="flex items-center">
-        <img className="w-[36px] h-[32px]" src={`/images/chart_fill-${theme}.svg`} role='button' />
+        <img className="w-[36px] h-[32px]" src={`/images/chart_fill-${theme}.svg`} role='button' onClick={onStatistics} />
 
         <ToggleTheme onChange={setTheme} />
       </div>

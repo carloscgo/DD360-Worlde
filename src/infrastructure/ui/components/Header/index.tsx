@@ -1,6 +1,6 @@
 // infrastructure/ui/components/Header
 
-import { useContext, useEffect, useState } from 'react'
+import { memo, useContext, useEffect, useState } from 'react'
 import { AppName } from '../../utils/constants'
 import ToggleTheme from '../ToggleTheme'
 import Themes from '../../utils/themes';
@@ -12,7 +12,7 @@ type PropsHeader = {
   onStatistics: () => void
 }
 
-export default function Header({ onInstructions, onStatistics, className = '' }: PropsHeader) {
+export default memo(function Header({ onInstructions, onStatistics, className = '' }: PropsHeader) {
   const [theme, setTheme] = useState<string>(Themes.light);
   const { toggleTheme } = useContext(ThemeContext);
 
@@ -40,4 +40,4 @@ export default function Header({ onInstructions, onStatistics, className = '' }:
       </div>
     </nav >
   )
-}
+});

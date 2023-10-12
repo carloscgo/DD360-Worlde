@@ -1,6 +1,6 @@
 // infrastructure/ui/components/Keyboard
 
-import { useContext, useEffect } from "react";
+import { memo, useContext, useEffect } from "react";
 import KeyB from "../KeyB";
 import ThemeContext from "../ThemeContext";
 
@@ -8,7 +8,7 @@ export const keydown = ({ key }: { key: string }) => {
     console.log({ key })
 };
 
-export default function Keyboard() {
+export default memo(function Keyboard() {
     const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
@@ -42,4 +42,4 @@ export default function Keyboard() {
             </div>
         </div>
     )
-}
+});

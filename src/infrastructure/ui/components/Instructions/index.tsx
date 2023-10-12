@@ -1,6 +1,6 @@
 // infrastructure/ui/components/Instructions
 
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Modal from "../Modal";
 import KeyB from "../KeyB";
 
@@ -9,7 +9,7 @@ type PropsInstructions = {
     onClose: () => void
 }
 
-export default function Instructions({ show, onClose }: PropsInstructions) {
+export default memo(function Instructions({ show, onClose }: PropsInstructions) {
     const [showModal, setShowModal] = useState<boolean>(false);
 
     useEffect(() => {
@@ -79,4 +79,4 @@ export default function Instructions({ show, onClose }: PropsInstructions) {
             </p>
         </Modal>
     )
-}
+});

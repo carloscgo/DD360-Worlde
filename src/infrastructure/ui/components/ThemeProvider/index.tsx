@@ -1,11 +1,11 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, memo, useState } from 'react';
 import ThemeContext from '../ThemeContext';
 
 type PropsThemeProvider = {
     children: ReactNode
 }
 
-const ThemeProvider = ({ children }: PropsThemeProvider) => {
+const ThemeProvider = memo(({ children }: PropsThemeProvider) => {
     const [theme, setTheme] = useState('light');
 
     const toggleTheme = (newTheme: string) => {
@@ -17,6 +17,6 @@ const ThemeProvider = ({ children }: PropsThemeProvider) => {
             {children}
         </ThemeContext.Provider>
     );
-};
+});
 
 export default ThemeProvider;

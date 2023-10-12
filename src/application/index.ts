@@ -6,8 +6,9 @@ export type Some = any;
 import { useIndexedDB, initDB } from "react-indexed-db-hook";
 
 import { Store } from '../infrastructure/ui/utils/constants';
+import { Words } from "../domain/models/Word";
 
-const useIndexDB = () => {
+const useIndexDB = (dbName: string = Store.Words) => {
   const {
     getByID,
     getAll,
@@ -15,7 +16,7 @@ const useIndexDB = () => {
     add: addRecord,
     update: updateRecord,
     deleteRecord,
-  } = useIndexedDB(Store)
+  } = useIndexedDB(dbName)
 
   return {
     getByID,
@@ -29,32 +30,46 @@ const useIndexDB = () => {
 
 const configDB = {
   name: 'DB-DD360',
-  version: 1,
+  version: 3,
   objectStoresMeta: [
     {
-      store: Store,
+      store: Store.Words,
       storeConfig: { keyPath: "index", autoIncrement: true },
       storeSchema: [
+        { name: "word", keypath: "word", options: { unique: true } },
         { name: "letters", keypath: "letters", options: { unique: false } },
         { name: "status", keypath: "status", options: { unique: false } },
       ],
     },
     {
-      store: 'dictionary',
+      store: Store.Statistics,
       storeConfig: { keyPath: "index", autoIncrement: true },
       storeSchema: [
-        { name: "word", keypath: "word", options: { unique: true } },
+        { name: "plays", keypath: "plays", options: { unique: false } },
+        { name: "victories", keypath: "victories", options: { unique: false } },
+        { name: "timer", keypath: "timer", options: { unique: false } },
       ],
     },
   ],
 };
 
-export const readDictionary = async () => {
+export const readDictionary = async (wordsPlayed: Words) => {
+  const wordsList = wordsPlayed.flatMap(({word}) => word);
+
   const response = await fetch('/dictionary/words.txt');
 
-  const data = await response.text();
+  const data = (await response.text()) as unknown as string;
 
-  return data.split('\n').filter(word => word.length === 5).map(word => word.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+  const wordsMapped = [
+    ...new Set([
+      ...data
+        .split('\n')
+        .map(word => word.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
+        .filter(word => word.length === 5 && !wordsList.includes(word))
+    ])
+  ];
+
+  return wordsMapped[Math.floor(Math.random() * wordsMapped.length)];
 };
 
 export { useIndexDB, initDB, configDB };

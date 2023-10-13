@@ -3,16 +3,13 @@
 import { memo, useContext, useEffect, useRef } from "react";
 import KeyB from "../KeyB";
 import ThemeContext from "../ThemeContext";
-
-export const keydown = (key: string, onKeydown: (key: string) => void) => {
-    onKeydown(key);
-};
+import { keydown } from "../../utils/helpers";
 
 type PropsKeyboard = {
     onKeydown: (key: string) => void
 }
 
-export default memo(function Keyboard({ onKeydown }: PropsKeyboard) {
+const Keyboard = memo(function Keyboard({ onKeydown }: PropsKeyboard) {
     const started = useRef<boolean>(false);
 
     const { theme } = useContext(ThemeContext);
@@ -27,7 +24,7 @@ export default memo(function Keyboard({ onKeydown }: PropsKeyboard) {
         return () => {
             document.removeEventListener("keydown", (event) => keydown(event.key, onKeydown));
         }
-    }, [])
+    }, [onKeydown])
 
     return (
         <div className="w-[638px] h-[238px] bg-gray-300 bg-opacity-5 rounded-[15px] pl-[20px] pr-[37px] py-[33px] flex flex-col gap-[9.57px]">
@@ -53,3 +50,5 @@ export default memo(function Keyboard({ onKeydown }: PropsKeyboard) {
         </div>
     )
 });
+
+export default Keyboard;

@@ -15,7 +15,7 @@ type PropsStatistics = {
     onFinishTime: () => void
 }
 
-export default memo(function Statistics({ show, plays, victories, timer, word, onClose, onFinishTime }: PropsStatistics) {
+const Statistics = memo(function Statistics({ show, plays, victories, timer, word, onClose, onFinishTime }: PropsStatistics) {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [timeLeft, setTimeLeft] = useState<number>(timer);
     const timerInterval = useRef<NodeJS.Timeout | null>(null);
@@ -88,3 +88,5 @@ export default memo(function Statistics({ show, plays, victories, timer, word, o
         </Modal>
     )
 });
+
+export default Statistics

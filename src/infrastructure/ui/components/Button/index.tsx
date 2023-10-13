@@ -16,4 +16,4 @@ export default function Button({ children, onClick }: PropsButton) {
             {children}
         </button>
     )
-};
+}

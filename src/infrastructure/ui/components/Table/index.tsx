@@ -14,7 +14,7 @@ type PropsTable = {
 const NUM_ROWS = 5;
 const NUM_COLS = 5;
 
-export default memo(function Table({ word, keysB, onComplete }: PropsTable) {
+const Table = memo(function Table({ word, keysB, onComplete }: PropsTable) {
     const currentRow = useRef<number>(0);
     const sending = useRef<boolean>(false);
     const completed = useRef<{ [key: number]: Some[] }>(fillArrayKeys([], false));
@@ -99,3 +99,5 @@ export default memo(function Table({ word, keysB, onComplete }: PropsTable) {
         </div>
     )
 });
+
+export default Table

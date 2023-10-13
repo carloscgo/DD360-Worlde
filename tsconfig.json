@@ -20,6 +20,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
   },
   "include": [
     "src"
@@ -34,4 +35,9 @@
       "./node_modules/@types/react"
     ]
   },
+  "types": [
+    "node",
+    "jest",
+    "@testing-library/jest-dom"
+  ],
 }

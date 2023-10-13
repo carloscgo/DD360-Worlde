@@ -34,7 +34,7 @@ export default function ToggleTheme({ onChange }: PropsToggleTheme) {
       setTheme(val)
       onChange(val)
     },
-    [dark, light, setTheme]
+    [dark, light, setTheme, onChange]
   )
 
   useEffect(() => {

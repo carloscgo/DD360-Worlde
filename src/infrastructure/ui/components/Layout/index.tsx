@@ -12,7 +12,7 @@ import { FiveCharArr, Statistics as StatisticsModel, Status, StatusKeyB, StatusW
 import { Store, MINUTES } from '../../utils/constants';
 import Table from '../Table';
 
-export default memo(function Layout() {
+const Layout = memo(function Layout() {
   const started = useRef<boolean>(false);
   const timerInterval = useRef<NodeJS.Timeout | null>(null);
 
@@ -276,3 +276,5 @@ export default memo(function Layout() {
     </ThemeProvider>
   )
 })
+
+export default Layout;

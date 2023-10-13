@@ -9,7 +9,7 @@ type PropsInstructions = {
     onClose: () => void
 }
 
-export default memo(function Instructions({ show, onClose }: PropsInstructions) {
+const Instructions = memo(function Instructions({ show, onClose }: PropsInstructions) {
     const [showModal, setShowModal] = useState<boolean>(false);
 
     useEffect(() => {
@@ -80,3 +80,5 @@ export default memo(function Instructions({ show, onClose }: PropsInstructions) 
         </Modal>
     )
 });
+
+export default Instructions;

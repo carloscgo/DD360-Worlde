@@ -16,4 +16,4 @@ export default function Points({ value, label }: PropsPoints) {
             </div>
         </div>
     )
-};
+}

@@ -2,16 +2,17 @@
 
 import { ReactNode, useEffect, useState } from "react"
 import { Colors } from "../../../../domain/models/Word"
+import { Some } from "../../../../application"
 
 type PropsKeyB = {
     children: string | ReactNode
     onClick?: () => void
     color: Colors
     isKey?: boolean
-    [key: string]: string | number | any
+    [key: string]: string | number | Some
 }
 
-export default function KeyB({ children, color, isKey, onClick, ...props }: PropsKeyB) {
+function KeyB({ children, color, isKey, onClick, ...props }: PropsKeyB) {
     const [styles, setStyles] = useState<string>('');
 
     const clickIsFunction = typeof onClick === 'function';
@@ -47,9 +48,9 @@ export default function KeyB({ children, color, isKey, onClick, ...props }: Prop
         } else {
             setStyles(`w-[76px] h-[76px] flex items-center justify-center ${mapColors.bg} ${mapColors.text} rounded-[5px] text-[35px] font-extrabold`);
         }
-    }, [isKey, color]);
+    }, [isKey, color, mapColors.bg, mapColors.text]);
 
-    const handlerClick: any = () => {
+    const handlerClick = () => {
         if (clickIsFunction) {
             onClick();
         }
@@ -65,4 +66,6 @@ export default function KeyB({ children, color, isKey, onClick, ...props }: Prop
             {children}
         </div>
     )
-};
+}
+
+export default KeyB;

@@ -12,13 +12,13 @@ type PropsHeader = {
   onStatistics: () => void
 }
 
-export default memo(function Header({ onInstructions, onStatistics, className = '' }: PropsHeader) {
+const Header = memo(function Header({ onInstructions, onStatistics, className = '' }: PropsHeader) {
   const [theme, setTheme] = useState<string>(Themes.light);
   const { toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     toggleTheme(theme);
-  }, [theme])
+  }, [theme, toggleTheme])
 
   return (
     <nav
@@ -41,3 +41,5 @@ export default memo(function Header({ onInstructions, onStatistics, className = 
     </nav >
   )
 });
+
+export default Header;

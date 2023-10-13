@@ -21,3 +21,8 @@ export const fillArrayKeys = (keysB: string[], defaultValue: string | boolean | 
 
     return chunks;
 }
+
+export const keydown = (key: string, onKeydown: (key: string) => void) => {
+    onKeydown(key);
+};
+

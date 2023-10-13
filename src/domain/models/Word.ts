@@ -13,6 +13,8 @@ export const StatusKeyB = {
   pending: 'pending',
 };
 
+export type Colors = 'green' | 'yellow' | 'gray' | 'opaque' | 'light';
+
 export type IdWord = string | number;
 
 export type KeyB = {

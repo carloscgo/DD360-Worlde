@@ -1,11 +1,12 @@
 // infrastructure/ui/components/KeyB
 
 import { ReactNode, useEffect, useState } from "react"
+import { Colors } from "../../../../domain/models/Word"
 
 type PropsKeyB = {
     children: string | ReactNode
     onClick?: () => void
-    color: 'green' | 'yellow' | 'gray' | 'opaque' | 'light'
+    color: Colors
     isKey?: boolean
     [key: string]: string | number | any
 }
@@ -38,7 +39,7 @@ export default function KeyB({ children, color, isKey, onClick, ...props }: Prop
             bg: 'bg-white dark:bg-slate-800 border border-black dark:border-slate-400',
             text: colorText,
         },
-    }[color];
+    }[color] ?? 'light';
 
     useEffect(() => {
         if (isKey) {

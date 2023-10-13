@@ -249,7 +249,7 @@ export default memo(function Layout() {
         />
 
         <Table
-          word={currentWord?.word}
+          word={currentWord?.word ?? ''}
           keysB={keysB}
           onComplete={async () => handlerComplete()}
         />
@@ -270,7 +270,7 @@ export default memo(function Layout() {
           plays={statistics.plays}
           victories={statistics.victories}
           timer={statistics.timer}
-          word={currentWord?.word}
+          word={currentWord?.word ?? ''}
           onClose={async () => handlerCloseStatistics()}
           onFinishTime={async () => handlerFinishTime()}
         />}

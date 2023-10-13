@@ -3,67 +3,95 @@
 import { Fragment, memo, useEffect, useRef } from "react";
 import KeyB from "../KeyB";
 import { fillArrayKeys } from "../../utils/helpers";
+import { Some } from "../../../../application";
 
 type PropsTable = {
-    word?: string
+    word: string
     keysB: string[]
     onComplete: () => void
 }
 
+const NUM_ROWS = 5;
+const NUM_COLS = 5;
+
 export default memo(function Table({ word, keysB, onComplete }: PropsTable) {
+    const currentRow = useRef<number>(0);
     const sending = useRef<boolean>(false);
-    const completed = useRef<{ [key: number]: boolean }>({
-        1: false,
-        2: false,
-        3: false,
-        4: false,
-        5: false,
-    });
+    const completed = useRef<{ [key: number]: Some[] }>(fillArrayKeys([], false));
+    const letterColors = useRef<{ [key: number]: Some[] }>(fillArrayKeys([], 'light'));
+    const arrayKeys = useRef<{ [key: number]: Some[] }>(fillArrayKeys([], 0));
 
-    const checkLetter = (char: string, index: number) => {
-        if (!char || !word) return 'light';
+    const checkLetter = (lettersArray: string[], col: number, row: number) => {
+        let color = 'light';
 
-        const charUpper = char.toUpperCase();
-        const wordUpper = word.toUpperCase();
-        const wordArray = wordUpper.split('');
-        const wordChar = wordArray[index];
+        if (lettersArray.filter(value => value).length === NUM_COLS) {
+            const wordUpper = word.toUpperCase();
+            const wordArray = wordUpper.split('');
 
-        if (wordChar === charUpper) {
-            completed.current[index + 1] = true;
+            const charUpper = lettersArray[col].toUpperCase();
+            const wordChar = wordArray[col];
 
-            return 'green';
+            if (wordChar === charUpper) {
+                completed.current[row][col] = true;
+
+                color = 'green';
+            } else {
+                completed.current[row][col] = false;
+
+                if (wordUpper.includes(charUpper)) {
+                    color = 'yellow';
+                } else {
+                    color = 'gray';
+                }
+            }
         }
 
-        completed.current[index + 1] = false;
-
-        if (wordUpper.includes(charUpper)) {
-            return 'yellow';
-        }
-
-        return 'gray';
+        return color;
     };
 
     useEffect(() => {
+        currentRow.current = 0;
         sending.current = false;
+        completed.current = fillArrayKeys([], false);
+        letterColors.current = fillArrayKeys([], 'light');
+        arrayKeys.current = fillArrayKeys([], 0);
     }, [word]);
 
     useEffect(() => {
-        if (!sending.current && Object.values(completed.current).every(value => value)) {
-            sending.current = true;
+        if (!sending.current) {
+            const lastIndex = keysB.filter(value => value).length - 1;
+            let rowIndex = Math.floor(lastIndex / 5);
+            rowIndex = rowIndex > -1 ? rowIndex : 0;
 
-            onComplete();
+            currentRow.current = rowIndex;
+
+            if (Object.values(completed.current[rowIndex]).filter(value => value).length === NUM_COLS) {
+                sending.current = true;
+
+                onComplete();
+
+                return;
+            }
         }
     }, [sending.current, Object.values(completed.current)]);
 
-    const arrayKeys = fillArrayKeys(keysB);
+    useEffect(() => {
+        arrayKeys.current = fillArrayKeys(keysB);
+
+        Array(NUM_ROWS).fill('').map((_, row) => {
+            Array(NUM_COLS).fill('').map((_, col) => {
+                letterColors.current[row][col] = checkLetter(arrayKeys.current[row], col, row);
+            });
+        });
+    }, [keysB]);
 
     return (
         <div className="flex flex-wrap items-center justify-center gap-[10px] w-[420px] mb-[50px]">
-            {Array(5).fill('', 0, 5).map((_, index1) => (
-                <Fragment key={index1}>
-                    {Array(5).fill('', 0, 5).map((_, index2) => (
-                        <KeyB key={index2} color={checkLetter(arrayKeys[index1][index2], index2)}>
-                            {arrayKeys[index1][index2]?.toUpperCase()}
+            {Array(NUM_ROWS).fill('').map((_, row) => (
+                <Fragment key={row}>
+                    {Array(NUM_COLS).fill('').map((_, col) => (
+                        <KeyB key={`${row}-${col}`} color={letterColors.current[row][col]}>
+                            {typeof arrayKeys.current[row][col] === 'string' ? arrayKeys.current[row][col].toUpperCase() : ''}
                         </KeyB>
                     ))}
                 </Fragment>

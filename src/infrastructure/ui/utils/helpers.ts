@@ -7,8 +7,8 @@ export const timeConvert = (time: number): string => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-export const fillArrayKeys = (keysB: string[]) => {
-    const array = keysB.concat(Array(25 - keysB.length).fill(''));
+export const fillArrayKeys = (keysB: string[], defaultValue: string | boolean | number = '') => {
+    const array = keysB.concat(Array(25 - keysB.length).fill(defaultValue));
 
     const chunkSize = array.length / 5;
     const chunks = [];

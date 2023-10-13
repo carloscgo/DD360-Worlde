@@ -1,27 +1,59 @@
-# React + TypeScript + Vite
+# DD360 Project
+This project uses **hexagonal architecture to structure** its code, This project is created using **vite**, **ReactJs**, **Typescript**, **TailwindCSS**. Here's how to use the available scripts to get started:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Installation
+To install dependencies, run:
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+```
+yarn install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Starting the React App
+This command will start the React app in development mode.
+
+```
+yarn run dev
+```
+
+## Build App
+Builds the app for production to the **dist** folder.
+
+```
+yarn run build
+```
+
+## Preview build
+Previews your production build locally.
+
+```
+yarn run preview
+```
+
+## Linting
+Lints the project using **eslint**.
+
+```
+yarn run lint
+```
+
+## Format code
+Formats your code.
+
+```
+yarn run prettier
+```
+
+## Unit test
+Launches the test runner in the interactive watch mode using **@testing-library**.
+
+```
+yarn run test
+```
+
+## Test coverage
+
+Reports test coverage.
+
+```
+yarn run test --coverage
+```

@@ -1,7 +1,7 @@
 // infrastructure/ui/components/Layout
 
 import Instructions from '../Instructions'
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import MetaTags from '../MetaTags'
 import Header from '../Header'
 import Statistics from '../Statistics';
@@ -55,12 +55,39 @@ export default memo(function Layout() {
         status: StatusWord.inprogress as Status,
       };
 
-      await addRecordWords(wordMapped);
+      const index = await addRecordWords(wordMapped);
 
-      setCurrentWord(wordMapped);
+      setCurrentWord({
+        ...wordMapped,
+        index,
+      });
 
-      setWordsPlayed(state => ([...state, wordMapped]));
+      setWordsPlayed(state => ([...state, {
+        ...wordMapped,
+        index,
+      }]));
     }
+  };
+
+  const newPlay = async (restart = false, completed = false) => {
+    setKeysB([]);
+
+    const data: StatisticsModel[] = await getAllStatistics();
+
+    const statisticsData = {
+      ...data[0],
+      plays: data[0].plays + 1,
+      timer: restart ? 0 : MINUTES * 60,
+    }
+
+    if (completed) {
+      statisticsData.victories = data[0].victories + 1;
+    }
+
+    setStatistics(state => ({ ...state, ...statisticsData }));
+
+    await updateRecordStatistics(statisticsData);
+    await seekNewWord();
   };
 
   const countdown = () => {
@@ -81,13 +108,15 @@ export default memo(function Layout() {
             timer: timer > 0 ? timer : statisticsData.timer,
           };
 
-          if (timer < 1) {
-            seekNewWord();
+          if (statisticsData.timer <= 1) {
+            await handlerFinishTime();
+
+            await newPlay();
+
+            return;
           }
 
-          if (statisticsData.timer > 0) {
-            await updateRecordStatistics(statisticsData);
-          }
+          await updateRecordStatistics(statisticsData);
         } else {
           await addRecordStatistics(statisticsData);
         }
@@ -98,11 +127,7 @@ export default memo(function Layout() {
   };
 
   useEffect(() => {
-    const timerTimeout = setTimeout(() => {
-      countdown();
-
-      clearTimeout(timerTimeout);
-    }, 1000);
+    countdown();
 
     return () => {
       if (timerInterval.current !== null) {
@@ -133,7 +158,7 @@ export default memo(function Layout() {
     }
   }, [started.current]);
 
-  const handlerPlay = () => {
+  const handlerPlay = async () => {
     setShowModalI(false);
 
     const inprogressWord = seekInprogressWord(wordsPlayed);
@@ -141,9 +166,9 @@ export default memo(function Layout() {
     if (wordsPlayed.length && inprogressWord) {
       setCurrentWord(inprogressWord);
     } else {
-      seekNewWord();
+      await seekNewWord();
 
-      updateRecordStatistics({
+      await updateRecordStatistics({
         ...statistics,
         plays: 1,
         timer: MINUTES * 60,
@@ -151,27 +176,38 @@ export default memo(function Layout() {
     }
   };
 
-  const handlerFinishTime = useCallback(() => {
+  const handlerFinishTime = async () => {
     if (currentWord?.word) {
       const wordMapped: Word = {
         ...currentWord,
         status: StatusWord.incomplete as Status,
       };
 
-      setWordsPlayed(state => ([...state, wordMapped]));
+      setWordsPlayed(state => {
+        const data = [...state];
 
-      updateRecordWords(wordMapped);
+        const index = data.findIndex(({ index }) => index === wordMapped.index);
 
-      updateRecordStatistics({
+        data[index] = wordMapped;
+
+        return data;
+      });
+
+      await updateRecordWords(wordMapped);
+
+      await seekNewWord();
+
+      await updateRecordStatistics({
         ...statistics,
         timer: MINUTES * 60,
       });
     }
-  }, [currentWord]);
+  };
 
-  const handlerCloseStatistics = () => {
+  const handlerCloseStatistics = async () => {
     setShowModalS(false);
-    seekNewWord();
+
+    await seekNewWord();
   };
 
   const handlerKeydown = (key: string) => {
@@ -196,35 +232,48 @@ export default memo(function Layout() {
     }
   };
 
+  const handlerComplete = async () => {
+    setShowModalS(true);
+
+    await newPlay(true, true);
+  };
+
   return (
     <ThemeProvider>
       <MetaTags />
 
       <div className="w-[100vw] h-[100vh] relative bg-stone-50 dark:bg-slate-800 flex flex-col justify-start items-center mx-auto">
-        <Header className='my-[83px]' onInstructions={() => setShowModalI(true)} onStatistics={() => setShowModalS(true)} />
+        <Header className='my-[83px]'
+          onInstructions={() => setShowModalI(true)}
+          onStatistics={() => setShowModalS(true)}
+        />
 
         <Table
           word={currentWord?.word}
           keysB={keysB}
+          onComplete={async () => handlerComplete()}
         />
 
         <Keyboard
-          onKeydown={handlerKeydown}
+          onKeydown={key => handlerKeydown(key)}
         />
 
-        <Instructions show={showModalI} onClose={handlerPlay} />
+        {showModalI && <Instructions
+          show={showModalI}
+          onClose={async () => handlerPlay()}
+        />}
 
         {currentWord?.word}
 
-        <Statistics
+        {showModalS && <Statistics
           show={showModalS}
           plays={statistics.plays}
           victories={statistics.victories}
           timer={statistics.timer}
           word={currentWord?.word}
-          onClose={() => handlerCloseStatistics()}
-          onFinishTime={() => handlerFinishTime()}
-        />
+          onClose={async () => handlerCloseStatistics()}
+          onFinishTime={async () => handlerFinishTime()}
+        />}
       </div>
     </ThemeProvider>
   )

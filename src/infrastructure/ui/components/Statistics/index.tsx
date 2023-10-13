@@ -51,7 +51,7 @@ export default memo(function Statistics({ show, plays, victories, timer, word, o
 
             show && onFinishTime();
         }
-    }, [timeLeft]);
+    }, [timeLeft, show, timerInterval.current]);
 
     const handlerClose = () => {
         setShowModal(false)

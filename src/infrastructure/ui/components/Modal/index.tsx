@@ -1,13 +1,20 @@
 // infrastructure/ui/components/Modal
 
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, ReactNode, useEffect, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
   PropsTransitionChild1,
   PropsTransitionChild2,
 } from '../../utils/constants'
-import { PropsModal } from '../../utils/interfaces'
 import Button from '../Button'
+
+type PropsModal = {
+  title: string
+  children: ReactNode
+  labelButton: string
+  show: boolean
+  onClose: (value: boolean) => void
+}
 
 export default function Modal({
   title,
@@ -24,8 +31,8 @@ export default function Modal({
   }, [show])
 
   const handlerClose = () => {
-    setOpen(false)
-    onClose(false)
+    setOpen(false);
+    onClose(false);
   }
 
   return (
@@ -34,7 +41,7 @@ export default function Modal({
         as="div"
         className="relative z-10"
         initialFocus={cancelButtonRef}
-        onClose={setOpen}
+        onClose={handlerClose}
       >
         <Transition.Child as={Fragment} {...PropsTransitionChild1}>
           <div className="fixed inset-0 bg-zinc-100 dark:bg-slate-800 bg-opacity-75 transition-opacity" />

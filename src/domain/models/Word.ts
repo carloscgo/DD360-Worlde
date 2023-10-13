@@ -34,6 +34,7 @@ export type Word = {
 export type Words = Word[];
 
 export type Statistics = {
+  index: number
   plays: number,
   victories: number,
   timer: number,

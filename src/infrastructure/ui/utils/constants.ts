@@ -31,4 +31,4 @@ export const PropsTransitionChild2 = {
   leaveTo: 'opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95',
 }
 
-export const MINUTES = 5;
+export const MINUTES = 1;

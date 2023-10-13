@@ -8,7 +8,7 @@ import { useIndexedDB, initDB } from "react-indexed-db-hook";
 import { Store } from '../infrastructure/ui/utils/constants';
 import { Words } from "../domain/models/Word";
 
-const useIndexDB = (dbName: string = Store.Words) => {
+const useIndexDB = (dbName: string) => {
   const {
     getByID,
     getAll,
@@ -30,7 +30,7 @@ const useIndexDB = (dbName: string = Store.Words) => {
 
 const configDB = {
   name: 'DB-DD360',
-  version: 3,
+  version: 6,
   objectStoresMeta: [
     {
       store: Store.Words,
@@ -43,7 +43,7 @@ const configDB = {
     },
     {
       store: Store.Statistics,
-      storeConfig: { keyPath: "index", autoIncrement: true },
+      storeConfig: { keyPath: "index", autoIncrement: false },
       storeSchema: [
         { name: "plays", keypath: "plays", options: { unique: false } },
         { name: "victories", keypath: "victories", options: { unique: false } },

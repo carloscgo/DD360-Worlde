@@ -263,8 +263,6 @@ export default memo(function Layout() {
           onClose={async () => handlerPlay()}
         />}
 
-        {currentWord?.word}
-
         {showModalS && <Statistics
           show={showModalS}
           plays={statistics.plays}

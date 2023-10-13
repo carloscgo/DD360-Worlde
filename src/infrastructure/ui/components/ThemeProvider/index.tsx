@@ -1,8 +1,10 @@
 import { ReactNode, memo, useState } from 'react';
 import ThemeContext from '../ThemeContext';
+import { Some } from '../../../../application';
 
 type PropsThemeProvider = {
     children: ReactNode
+    [key: string]: Some
 }
 
 const ThemeProvider = memo(({ children }: PropsThemeProvider) => {
